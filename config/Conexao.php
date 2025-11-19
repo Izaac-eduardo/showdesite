@@ -3,7 +3,7 @@
         private static $host = "localhost";
         private static $usuario = "root";
         private static $senha = "";
-        private static $banco = "showdefeira";
+        private static $banco = "geekstore";
 
         public static function conectar() {
             try {
