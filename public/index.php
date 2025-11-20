@@ -1,3 +1,7 @@
+<?php 
+
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -9,12 +13,10 @@
     <link rel="stylesheet" href="
     css/all.min.css">
     <link rel="stylesheet" href="css/style.css?v=<?= time() ?>">
-<<<<<<< HEAD
-=======
     <link rel="shortcut icon" href="images/geeklogo.ico" type="image/x-icon">
->>>>>>> 53f50d9 (ajustes)
- <script src="js/jquery-3.6.0.min.js"></script>
- <script src="js/bootstrap.bundle.min.js"></script>
+ <script src="js/jquery-3.5.1.min.js"></script>
+<script src="js/parsley.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
  
 </head>
 <body>
