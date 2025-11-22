@@ -2,6 +2,18 @@
 <div class="card">
     <div class="card-header">
         <h1>Carrinho de compras</h1>
+
+    </div>
+    <div class="card-body">
+        <?php 
+        if(isset($_SESSION["cliente"]["id"])){
+            echo "<p>
+            Olá, " . $_SESSION["cliente"]["nome"] . "! Você está logado. <a href='carrinho/sair'>Sair</a></p>";
+        
+        }
+        
+        
+        ?>
     </div>
     <div class="card-body">
         <table class="table table-bordered table-striped">

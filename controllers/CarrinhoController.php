@@ -24,13 +24,18 @@ require "../views/carrinho/index.php";
         }
         public function finalizar() {
             if(isset($_SESSION["cliente"]["id"]))
-            require "../views/carrinho/salvar.php";
+            require "../views/carrinho/finalizar.php";
         else 
            require "../views/carrinho/login.php"; 
         }
         public function cadastrar() {
             require "../views/carrinho/cadastrar.php";
         }
+        public function logar() {
+            require "../views/carrinho/logar.php";
 }
-
-?>
+public function sair($id, $img) {
+    unset($_SESSION["cliente"]);
+    require "../views/carrinho/index.php";
+}
+}

@@ -43,4 +43,43 @@ public function salvar($dados) {
     }
 }
 
+public function logar($email){
+    $sql = "SELECT * FROM cliente WHERE email = :email LIMIT 1" ;
+
+    $consulta = $this->pdo->prepare($sql);
+    $consulta->bindValue(":email",$email);
+    $consulta->execute();
+    $dados = $consulta->fetch(PDO::FETCH_OBJ);
+    return $dados;
+} 
+public function salvarPedido($preference_id) {
+    // Use nomes de colunas explicitamente para evitar mismatch com a estrutura da tabela
+    $sqlPedido = "INSERT INTO pedido VALUES (null, :cliente_id, NOW(), :preference_id)";
+    $consulta = $this->pdo->prepare($sqlPedido);
+    $consulta->bindValue(":cliente_id", $_SESSION["cliente"]["id"] );
+    $consulta->bindValue(":preference_id", $preference_id);
+
+    if ($consulta->execute()) {
+
+        $pedido_id = $this->pdo->lastInsertId();
+
+        foreach ($_SESSION["carrinho"] as $dados) {
+            // Use nomes de colunas explicitamente também
+            $sqlItem = "INSERT INTO item (pedido_id, produto_id, qtde, valor) VALUES (:pedido_id, :produto_id, :qtde, :valor)";
+            $consultaItem = $this->pdo->prepare($sqlItem);
+            $consultaItem->bindValue(":pedido_id", $pedido_id);
+            $consultaItem->bindValue(":produto_id", $dados["id"]);
+            $consultaItem->bindValue(":qtde", $dados["qtde"]);
+            $consultaItem->bindValue(":valor", $dados["valor"]);
+            if (!$consultaItem->execute()) 
+                // se falhar ao inserir um item, pode-se remover o pedido ou sinalizar erro
+                return 0;
+            
+        }
+
+     
+    } else {
+        return 0; // Erro ao salvar pedido
+    } unset($_SESSION["carrinho"]); return 1;
+} 
 }
