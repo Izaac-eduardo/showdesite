@@ -141,10 +141,7 @@ session_start();
         </div>
     </footer>
 
-    <!-- Floating promo button -->
-    <div id="floatingPromo" class="floating-promo small-text" title="Promoções da Black">
-        Promoções da Black
-    </div>
+    
 
     <script>
         // Click handler: show a simple message or redirect

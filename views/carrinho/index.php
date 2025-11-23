@@ -1,76 +1,104 @@
 <script src="js/jquery-3.5.1.min.js"></script>
-<div class="card">
-    <div class="card-header">
-        <h1>Carrinho de compras</h1>
-
-    </div>
-    <div class="card-body">
-        <?php 
-        if(isset($_SESSION["cliente"]["id"])){
-            echo "<p>
-            Olá, " . $_SESSION["cliente"]["nome"] . "! Você está logado. <a href='carrinho/sair'>Sair</a></p>";
-        
-        }
-        
-        
-        ?>
-    </div>
-    <div class="card-body">
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <td>Imagem</td>
-                    <td>Nome</td>
-                    <td>Quantidade</td>
-                    <td>Valor Unitário</td>
-                    <td>Subtotal</td>
-                    <td>Ações</td>
-                </tr>
-            </thead>
-            <tbody>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 style="margin: 0; color: #a78bfa;"> Carrinho de Compras</h1>
                 <?php 
-                $total = 0;
-                if (!empty($_SESSION["carrinho"])) {
-                foreach ($_SESSION["carrinho"] as $dados)
-                {$total = $total + $dados["qtde"] * $dados["valor"];
-                    ?>
-                    <tr>
-                        <td><img src="<?=$img  ?><?= $dados["imagem"] ?>" alt="" width="130px"></td>
-                        <td>
-                            <?= $dados["nome"] ?>
-                            <div class="mt-2">
-                                <small class="text-muted">Verificando estoque...</small>
-                                <div class="estoque-info" id="estoque-<?= $dados["id"] ?>" style="margin-top: 5px; font-weight: bold;"></div>
-                            </div>
-                        </td>
-                        <td>
-                            <input type="number" value="<?= $dados["qtde"] ?>" min="1" class="form-control" style="width: 80px;"
-                            onblur="somarQuantidade(this.value, <?= $dados["id"]?>)">
-                            <small class="text-muted mt-1 d-block qtde-aviso-<?= $dados["id"] ?>"></small>
-                        </td>
-                        <td>R$ <?= number_format($dados["valor"], 2, ",", ".") ?></td>
-                        <td>R$ <?= number_format($dados["qtde"] * $dados["valor"], 2, ",", ".") ?></td>
-                        <td>
-                            <a href="carrinho/excluir/<?= $dados["id"] ?>" class="btn btn-danger">
-                            <i class="fa fas-trash"></i>
-                        Excluir</a>
-                        </td>
-                    </tr>
-                    <?php
-                }}
+                if(isset($_SESSION["cliente"]["id"])){
+                    echo '<div style="text-align: right;">
+                        <p style="margin-bottom: 0.5rem; color: #aaa;">Bem-vindo, <strong style="color: #a78bfa;">' . $_SESSION["cliente"]["nome"] . '</strong></p>
+                        <a href="carrinho/sair" class="btn btn-sm btn-danger"><i class="fas fa-sign-out-alt"></i> Sair</a>
+                    </div>';
+                }
                 ?>
-            </tbody>
-        </table>
-        <p class="float-start fw-bold">
-            <a href="carrinho/limpar" class="btn btn-warning">
-                <i class="fa fa-eraser"></i>
-                Limpar Carrinho
-            </a>
-            <a href="carrinho/finalizar" class="btn btn-success" onclick="return validarEstoqueAntesFinalizar();">
-                <i class="fa fa-check"></i>
-                Finalizar Compra  </a>
-        </p>
-        <p class="float-end valor">R$ <?= number_format($total, 2, ",", ".") ?></p>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #a78bfa;">
+                            <th style="color: #000;"> </th>
+                            <th style="color: #000;"> </th>
+                            <th style="color: #000; text-align: center;"> Quantidade</th>
+                            <th style="color: #000; text-align: right;"> Valor Unit.</th>
+                            <th style="color: #000; text-align: right;"> Subtotal</th>
+                            <th style="color: #000; text-align: center;"> Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                        $total = 0;
+                        if (!empty($_SESSION["carrinho"])) {
+                        $index = 0;
+                        foreach ($_SESSION["carrinho"] as $dados) {
+                            $total = $total + $dados["qtde"] * $dados["valor"];
+                            $index++;
+                            ?>
+                            <tr style="vertical-align: middle;">
+                                <td>
+                                    <img src="<?=$img  ?><?= $dados["imagem"] ?>" alt="<?= $dados["nome"] ?>" style="width: 100px; border-radius: 8px; object-fit: cover; border: 1px solid rgba(124, 58, 237, 0.3); transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                                </td>
+                                <td>
+                                    <div>
+                                        <strong style="color: #000; font-size: 1.05rem;"><?= $dados["nome"] ?></strong>
+                                        <div class="mt-2">
+                                           
+                                            <div class="estoque-info " id="estoque-<?= $dados["id"] ?>" style="margin-top: 5px; font-weight: bold; color"></div>
+                                        </div>
+                                    </div>
+                                    <small class="text-warning  mt-2 d-block qtde-aviso-<?= $dados["id"] ?>"></small>
+                                </td>
+                                <td style="text-align: center;">
+                                    <input type="number" value="<?= $dados["qtde"] ?>" min="1" class="form-control" style="width: 70px; margin: auto;"
+                                    onblur="somarQuantidade(this.value, <?= $dados["id"]?>)">
+                                </td>
+                                <td style="text-align: right; color: #000; font-weight: 600;">R$ <?= number_format($dados["valor"], 2, ",", ".") ?></td>
+                                <td style="text-align: right; color: #000; font-weight: 700; font-size: 1.1rem;">R$ <?= number_format($dados["qtde"] * $dados["valor"], 2, ",", ".") ?></td>
+                                <td style="text-align: center;">
+                                    <a href="carrinho/excluir/<?= $dados["id"] ?>" class="btn btn-sm btn-danger" title="Remover do carrinho">
+                                        <i class="fas fa-trash-alt"></i> Remover
+                                    </a>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                        } else {
+                            echo '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: #b3b2b2ff;">
+                                <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 1rem; display: block; opacity: 0.5;"></i>
+                                <p>Seu carrinho está vazio. Volte para a loja e escolha seus produtos!</p>
+                                <a href="index" class="btn btn-primary mt-3"><i class="fas fa-shopping-bag"></i> Continuar Comprando</a>
+                            </td></tr>';
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card-footer" style="background: rgba(124, 58, 237, 0.05); border-top: 2px solid rgba(124, 58, 237, 0.3);">
+            <div class="d-flex justify-content-between align-items-center flex-wrap" style="gap: 1rem;">
+                <div class="btn-group" role="group">
+                    <a href="carrinho/limpar" class="btn btn-warning" title="Limpar todo o carrinho">
+                        <i class="fas fa-trash"></i> Limpar Carrinho
+                    </a>
+                    <a href="index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Continuar Comprando
+                    </a>
+                </div>
+                <div style="text-align: right;">
+                    <p style="margin-bottom: 0.5rem; color: #aaa; font-size: 0.9rem;">TOTAL:</p>
+                    <p class="valor" style="margin: 0; font-size: 1.8rem;">R$ <?= number_format($total, 2, ",", ".") ?></p>
+                </div>
+                <div>
+                    <a href="carrinho/finalizar" class="btn btn-success btn-lg" onclick="return validarEstoqueAntesFinalizar();" style="padding: 0.75rem 2rem;">
+                        <i class="fas fa-lock"></i> Finalizar Compra
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <script>
