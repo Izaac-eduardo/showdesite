@@ -10,7 +10,12 @@
 <strong>Pedido:  <?= $dados->id ?></strong> - 
 Data: <?= $dados->dt ?>
 </p>
-<table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped table-hover">
+    <tr>
+        <th>Nome</th>
+        <th>Valor</th>
+        <th>Quantidade</th>
+    </tr>
 <?php
 $itens = $this->pedidos->getItens($dados->id);
 foreach($itens as $item) {
